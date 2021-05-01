@@ -1,0 +1,30 @@
+version: "3.3"
+
+networks: 
+  asa-network:    
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services: 
+  flask_app:
+    build: .
+    container_name: flask_app_production
+    ports:
+      - '5000:5000'
+    networks:
+      asa-network:
+        ipv4_address: 172.20.0.5
+  
+  postgres-server:
+    image: postgres
+    container_name: flask_app_postgreSQL
+    environment:
+      POSTGRES_PASSWORD: "banco123"
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/marciocunha/Git/ufu/AulasTex/2020_1/ASA/Aula04_docker/data:/var/lib/postgresql/data 
+    networks:
+      asa-network:
+        ipv4_address: 172.20.0.6
